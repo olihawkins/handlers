@@ -225,7 +225,7 @@ func (h *FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check the mode to ensure the target file path is a file
+	// Check the mode to ensure the target filepath is a file
 	switch mode := finfo.Mode(); {
 
 	// If the target file is a directory redirect to the path with a slash
