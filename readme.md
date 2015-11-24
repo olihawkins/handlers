@@ -1,9 +1,9 @@
 # handlers
 Handlers is a small library of utility http handlers that are useful for building web applications. The library includes a NotFoundHandler, an ErrorHandler, and a FileHandler. 
 
-NotFoundHandler and ErrorHandler provide a simple way to implement custom 404 and 500 status pages: create your own application specific error page templates and call one of handlers' Serve methods with the appropriate arguments.
+NotFoundHandler and ErrorHandler provide a simple way to implement custom 404 and 500 status pages: create your own application specific error page templates and call the handler's Serve methods with the appropriate arguments.
 
-FileHandler provides similar functionality to the FileServer in Go's net/http package, but with two differences: it will not show directory listings for directories under its path, and it will respond to any request for a non-existent file with the given NotFoundHandler.
+FileHandler provides similar functionality to the FileServer in Go's [net/http][gnh] package, but with two differences: it will not show directory listings for directories under its path, and it will respond to any request for a non-existent file with the given NotFoundHandler.
 
 ### Installation
 Install with `go get`.
@@ -19,7 +19,7 @@ Use `go test` to run the tests.
 See the [GoDoc][gd] for the full documentation.
 
 ### NotFoundHandler and ErrorHandler
-To use the NotFoundHandler and the ErrorHandler, provide your own custom error templates when creating the handlers. The NotFoundHandler template should contain the {{.Path}} tag, while the ErrorHandler template should contain the {{.ErrorMessage}} tag. These handlers can be initialised in two ways, either by providing a path to the template file, or by providing a pointer to a struct of type template.Template from Go's html/template package.
+To use the NotFoundHandler and the ErrorHandler, provide your own custom error templates when creating the handlers. The NotFoundHandler template should contain the {{.Path}} tag, while the ErrorHandler template should contain the {{.ErrorMessage}} tag. These handlers can be initialised in two ways, either by providing a path to the template file, or by providing a pointer to a struct of type template.Template from Go's [html/template][ght] package.
 ```go
 // Create a NotFoundHandler with the given template file
 nfh := handlers.LoadNotFoundHandler("templates/notfound.html")
@@ -83,3 +83,5 @@ http.Handle("/test/", fh)
 FileHandler's ServeHTTP method is just a wrapper around http.ServeFile, with paths and response values modified to provide the appropriate behaviour.
 
    [gd]: <https://godoc.org/github.com/olihawkins/handlers>
+   [gnh]: <https://golang.org/pkg/net/http/>
+   [ght]: <https://golang.org/pkg/html/template/>
