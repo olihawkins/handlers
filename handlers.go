@@ -1,18 +1,18 @@
 /*
-Package handlers is a small library of utility http handlers useful for 
-building web applications. It includes a NotFoundHandler, an ErrorHandler, 
+Package handlers is a small library of utility http handlers that are useful 
+for building web applications. It includes a NotFoundHandler, an ErrorHandler, 
 and a FileHandler. 
 
 The NotFoundHandler and ErrorHandler provide a simple way to respond to the 
 client with custom 404 and 500 status pages: create your own application 
-specific error page templates and call one of handler's Serve methods with 
-the appropriate arguments.
+specific error page templates and call each of the handler's Serve methods 
+with the appropriate arguments.
 
 These two handlers are intended to be used indirectly, from inside other 
 handlers where server errors or page not found errors occur and you need 
-to inform the client. However, both of these types implement the http.Handler 
-interface with a ServeHTTP method, which shows their default behaviour when 
-bound to a specific route.
+to report them to the browser. However, both of these types implement the 
+http.Handler interface with a ServeHTTP method, which shows their default 
+behaviour when bound to a specific route.
 
 The FileHandler provides similar functionality to the FileServer in the 
 net/http package, but with two differences: it will not show directory 
@@ -111,7 +111,7 @@ func (h *ErrorHandler) AlwaysServeError(w http.ResponseWriter, message string) {
 	return
 }
 
-// Serve HTTP serves the default error message in the error template.
+// ServeHTTP serves the default error message in the error template.
 func (h *ErrorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	
 	templateData := &ErrorMessage{h.defaultMessage}
