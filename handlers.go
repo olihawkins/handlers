@@ -170,7 +170,7 @@ func (h *NotFoundHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // FileHandler serves files requested under the given url path from the given 
 // directory. The url path should be the same as the path to which the handler 
-// is bound with htp.Handle. If the file is not found the handler serves a 404 
+// is bound with http.Handle. If the file is not found the handler serves a 404 
 // using the given notFoundHandler. The notFoundHandler can be any Handler, but 
 // its ServeHTTP method should return a 404. Unlike Go's built-in FileServer, 
 // FileHandler will not return directory listings for directories without an 
