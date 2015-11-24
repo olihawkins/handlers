@@ -22,15 +22,15 @@ See the [GoDoc][gd] for the full documentation.
 To use the NotFoundHandler and the ErrorHandler, provide your own custom error templates when creating the handlers. The NotFoundHandler template should contain the {{.Path}} tag, while the ErrorHandler template should contain the {{.ErrorMessage}} tag. These handlers can be initialised in two ways, either by providing a path to the template file, or by providing a pointer to a struct of type Template from Go's [html/template][ght] package.
 ```go
 // Create a NotFoundHandler with the given template file
-nft := filepath.FromSlash("templates/notfound.html")
-nfh := handlers.LoadNotFoundHandler(nft)
+templatePath := filepath.FromSlash("templates/notfound.html")
+nfh := handlers.LoadNotFoundHandler(templatePath)
 
 // Create a NotFoundHandler with the given *template.Template
 nfh := handlers.NewNotFoundHandler(myNotFoundTemplate)
 
 // Create an ErrorHandler with the given template file
-et := filepath.FromSlash("templates/error.html")
-eh := handlers.LoadErrorHandler(et, "Default error message", true)
+templatePath := filepath.FromSlash("templates/error.html")
+eh := handlers.LoadErrorHandler(templatePath, "Default error message", true)
 
 // Create an ErrorHandler with the given *template.Template
 eh := handlers.NewErrorHandler(myErrorTemplate, "Default error message", true)
