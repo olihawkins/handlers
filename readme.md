@@ -36,7 +36,7 @@ eh := handlers.LoadErrorHandler(templatePath, "Default error message", true)
 eh := handlers.NewErrorHandler(myErrorTemplate, "Default error message", true)
 
 ```
-As the above examples show, the functions used to create a NotFoundHandler only need a template, while the functions used to create an ErrorHandler take two more arguments. The first is a string that specifies the default error message to show when the handler's ServeError method is called. The second is a boolean that tells the handler whether to serve the default error message (false) or the specific error message passed to the ServeError method (true). This lets you report detailed error messages to the browser while developing, which can be turned off in production. The ErrorHandler's AlwaysServeError method lets you override the default error message even when the handler is set not to display specific errors.
+As the above examples show, the functions used to create a NotFoundHandler only need a template, while the functions used to create an ErrorHandler take two more arguments. The first is a string that specifies the default error message to show when the handler's ServeError method is called. The second is a boolean that tells the handler whether to serve the default error message (false) or the specific error message passed to the [ServeError][hse] method (true). This lets you report detailed error messages to the browser while developing, which can be turned off later in production. The ErrorHandler's AlwaysServeError method lets you override the default error message even when the handler is set not to display specific errors.
 
 These two handlers are intended to be used indirectly, from inside other handlers, where page not found or server errors occur and you need 
 to report them to the browser. A simplified example handler is shown below illustrating their use.
@@ -87,4 +87,5 @@ FileHandler's ServeHTTP method is a wrapper around [http.ServeFile][gsf], with p
    [gd]: <https://godoc.org/github.com/olihawkins/handlers>
    [gnh]: <https://golang.org/pkg/net/http/>
    [ght]: <https://golang.org/pkg/html/template/>
+   [hse]: <https://godoc.org/github.com/olihawkins/handlers#ErrorHandler.ServeError>
    [gsf]: <https://golang.org/pkg/net/http/#ServeFile>
