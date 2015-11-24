@@ -1,7 +1,7 @@
 # handlers
 Handlers is a small library of utility http handlers that are useful for building web applications. The library includes a NotFoundHandler, an ErrorHandler, and a FileHandler. 
 
-NotFoundHandler and ErrorHandler provide a simple way to implement custom 404 and 500 status pages: create your own application specific error page templates and call the handler's Serve methods with the appropriate arguments.
+NotFoundHandler and ErrorHandler provide a simple way to implement custom 404 and 500 status pages: create your own application specific error page templates and call each handler's Serve methods with the appropriate arguments.
 
 FileHandler provides similar functionality to the FileServer in Go's [net/http][gnh] package, but with two differences: it will not show directory listings for directories under its path, and it will respond to any request for a non-existent file with the given NotFoundHandler.
 
@@ -19,25 +19,25 @@ Use `go test` to run the tests.
 See the [GoDoc][gd] for the full documentation.
 
 ### NotFoundHandler and ErrorHandler
-To use the NotFoundHandler and the ErrorHandler, provide your own custom error templates when creating the handlers. The NotFoundHandler template should contain the {{.Path}} tag, while the ErrorHandler template should contain the {{.ErrorMessage}} tag. These handlers can be initialised in two ways, either by providing a path to the template file, or by providing a pointer to a struct of type template.Template from Go's [html/template][ght] package.
+To use the NotFoundHandler and the ErrorHandler, provide your own custom error templates when creating the handlers. The NotFoundHandler template should contain the {{.Path}} tag, while the ErrorHandler template should contain the {{.ErrorMessage}} tag. These handlers can be initialised in two ways, either by providing a path to the template file, or by providing a pointer to a struct of type Template from Go's [html/template][ght] package.
 ```go
 // Create a NotFoundHandler with the given template file
-nfh := handlers.LoadNotFoundHandler("templates/notfound.html")
+nfh := handlers.LoadNotFoundHandler(filepath.FromSlash("templates/notfound.html")
 
 // Create a NotFoundHandler with the given *template.Template
 nfh := handlers.NewNotFoundHandler(myNotFoundTemplate)
 
 // Create an ErrorHandler with the given template file
-eh := handlers.LoadErrorHandler("templates/error.html", "Default error message", true)
+eh := handlers.LoadErrorHandler(filepath.FromSlash("templates/error.html"), "Default error message", true)
 
 // Create an ErrorHandler with the given *template.Template
 eh := handlers.NewErrorHandler(myErrorTemplate, "Default error message", true)
 
 ```
-As the above example shows, the functions for creating a NotFoundHandler only need a template, but the functions for creating an ErrorHandler take two more arguments. The first is a string that specifies the default error message to show when the handler's ServeError method is called, the second is a boolean that tells the handler whether to serve the default error message (false) or the specific error message passed to the ServeError method (true). This lets you report detailed error messages to the browser when developing, which can be turned off in production. The ErrorHandler's AlwaysServeError method lets you override the default error message even when the handler is set not to display specific errors.
+As the above examples show, the functions used to create a NotFoundHandler only need a template, while the functions to create an ErrorHandler take two more arguments. The first is a string that specifies the default error message to show when the handler's ServeError method is called. The second is a boolean that tells the handler whether to serve the default error message (false) or the specific error message passed to the ServeError method (true). This lets you report detailed error messages to the browser while developing, which can be turned-off later in production. The ErrorHandler's AlwaysServeError method lets you override the default error message even when the handler is set not to display specific errors.
 
-These two handlers are intended to be used indirectly, from inside other handlers where page not found or server errors occur and you need 
-to report them to the client. A simplified example http.Handler is shown below illustrating their use.
+These two handlers are intended to be used indirectly, from inside other handlers, where page not found or server errors occur and you need 
+to report them to the browser. A simplified example http.Handler is shown below illustrating their use.
 
 ```go
 // An example handler which uses a NotFoundHandler and an ErrorHandler
