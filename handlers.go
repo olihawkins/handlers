@@ -66,8 +66,8 @@ func NewErrorHandler(template *template.Template, defaultMessage string, display
 }
 
 // LoadErrorHandler is a convenience function that returns a new ErrorHandler 
-// using the template file specified by tpath. The function first loads the 
-// template and then creates the ErrorHandler using NewErrorHandler.
+// using the template file specified by templatePath. The function first loads 
+// the template and then creates the ErrorHandler using NewErrorHandler.
 func LoadErrorHandler(templatePath string, defaultMessage string, displayErrors bool) *ErrorHandler {
 
 	template, err := template.ParseFiles(templatePath)
@@ -146,7 +146,7 @@ func NewNotFoundHandler(template *template.Template) *NotFoundHandler {
 }
 
 // LoadNotFoundHandler is a convenience function that returns a new NotFoundHandler 
-// using the template file specified by tpath. The function first loads the 
+// using the template file specified by templatePath. The function first loads the 
 // template and then creates the NotFoundHandler using NewNotFoundHandler.
 func LoadNotFoundHandler(templatePath string) *NotFoundHandler {
 
