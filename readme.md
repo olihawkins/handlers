@@ -44,8 +44,8 @@ to report them to the browser. A simplified example handler is shown below illus
 ```go
 // An example handler which uses a NotFoundHandler and an ErrorHandler
 type ExampleHandler struct {
-	eh *handlers.ErrorHandler
-	nfh *handlers.NotFoundHandler
+	errorHandler *handlers.ErrorHandler
+	notFoundHandler *handlers.NotFoundHandler
 }
 
 // ServeHTTP for the example handler
@@ -53,7 +53,7 @@ func (h *ExampleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// If the request is not for the homepage, serve a 404
 	if r.URL.Path != "/" {
-		h.nfh.ServeHTTP(w, r)
+		h.notFoundHandler.ServeHTTP(w, r)
 		return
 	}
 
@@ -62,10 +62,11 @@ func (h *ExampleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// If the function returns an error, serve the error page
 	if (err != nil) {
-		h.eh.ServeError(w, "Could not get data.")
+		h.errorHandler.ServeError(w, "Could not get data.")
 		return
 	}
 
+	// Serve data
 	fmt.Fprintf(w, "%s", data)
 	return
 }
