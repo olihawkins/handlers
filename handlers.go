@@ -159,7 +159,7 @@ func LoadNotFoundHandler(templatePath string) *NotFoundHandler {
 	return NewNotFoundHandler(template)
 }
 
-// Serve HTTP serves the path in the handler's template.
+// ServeHTTP serves the path in the handler's template.
 func (h *NotFoundHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	
 	templateData := &NotFoundData{r.URL.Path}
@@ -193,7 +193,8 @@ func NewFileHandler(urlPath string, directory string, notFoundHandler http.Handl
 	}
 }
 
-// Serve HTTP serves the path in the handler's template.
+// ServeHTTP is a wrapper around http.ServeFile, with paths and response 
+// values modified to provide the appropriate behaviour for the FileHandler.
 func (h *FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	const indexPage string = "index.html"
