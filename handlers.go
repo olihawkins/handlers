@@ -55,12 +55,12 @@ type ErrorHandler struct {
 // to be printed to the screen during development, but turned off in production. 
 // The handler's AlwaysServeError method forces the display of a particular
 // error message even if displayErrors is set to false.
-func NewErrorHandler(t *template.Template, message string, displayErrors bool) *ErrorHandler {
+func NewErrorHandler(template *template.Template, defaultMessage string, displayErrors bool) *ErrorHandler {
 
 	return &ErrorHandler{
 
-		template: t,
-		defaultMessage: message,
+		template: template,
+		defaultMessage: defaultMessage,
 		displayErrors: displayErrors,
 	}
 }
@@ -68,15 +68,15 @@ func NewErrorHandler(t *template.Template, message string, displayErrors bool) *
 // LoadErrorHandler is a convenience function that returns a new ErrorHandler 
 // using the template file specified by tpath. The function first loads the 
 // template and then creates the ErrorHandler using NewErrorHandler.
-func LoadErrorHandler(tpath string, message string, displayErrors bool) *ErrorHandler {
+func LoadErrorHandler(templatePath string, defaultMessage string, displayErrors bool) *ErrorHandler {
 
-	templateFile, err := template.ParseFiles(tpath)
+	template, err := template.ParseFiles(templatePath)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return NewErrorHandler(templateFile, message, displayErrors)
+	return NewErrorHandler(template, defaultMessage, displayErrors)
 }
 
 // ServeError serves the appropriate error message in the error template
@@ -137,26 +137,26 @@ type NotFoundHandler struct {
 // NewNotFoundHandler returns a new NotFoundHandler with the handler values 
 // initialised. The handler uses the given template to print the path to the
 // file not found with a 404. The template must display {{.Path}}.
-func NewNotFoundHandler(t *template.Template) *NotFoundHandler {
+func NewNotFoundHandler(template *template.Template) *NotFoundHandler {
 
 	return &NotFoundHandler{
 
-		template: t,
+		template: template,
 	}
 }
 
 // LoadNotFoundHandler is a convenience function that returns a new NotFoundHandler 
 // using the template file specified by tpath. The function first loads the 
 // template and then creates the NotFoundHandler using NewNotFoundHandler.
-func LoadNotFoundHandler(tpath string) *NotFoundHandler {
+func LoadNotFoundHandler(templatePath string) *NotFoundHandler {
 
-	templateFile, err := template.ParseFiles(tpath)
+	template, err := template.ParseFiles(templatePath)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return NewNotFoundHandler(templateFile)
+	return NewNotFoundHandler(template)
 }
 
 // Serve HTTP serves the path in the handler's template.
