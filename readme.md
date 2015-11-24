@@ -22,19 +22,21 @@ See the [GoDoc][gd] for the full documentation.
 To use the NotFoundHandler and the ErrorHandler, provide your own custom error templates when creating the handlers. The NotFoundHandler template should contain the {{.Path}} tag, while the ErrorHandler template should contain the {{.ErrorMessage}} tag. These handlers can be initialised in two ways, either by providing a path to the template file, or by providing a pointer to a struct of type Template from Go's [html/template][ght] package.
 ```go
 // Create a NotFoundHandler with the given template file
-nfh := handlers.LoadNotFoundHandler(filepath.FromSlash("templates/notfound.html")
+nfp := filepath.FromSlash("templates/notfound.html")
+nfh := handlers.LoadNotFoundHandler(nfp)
 
 // Create a NotFoundHandler with the given *template.Template
 nfh := handlers.NewNotFoundHandler(myNotFoundTemplate)
 
 // Create an ErrorHandler with the given template file
-eh := handlers.LoadErrorHandler(filepath.FromSlash("templates/error.html"), "Default error message", true)
+ep := filepath.FromSlash("templates/error.html")
+eh := handlers.LoadErrorHandler(ep, "Default error message", true)
 
 // Create an ErrorHandler with the given *template.Template
 eh := handlers.NewErrorHandler(myErrorTemplate, "Default error message", true)
 
 ```
-As the above examples show, the functions used to create a NotFoundHandler only need a template, while the functions to create an ErrorHandler take two more arguments. The first is a string that specifies the default error message to show when the handler's ServeError method is called. The second is a boolean that tells the handler whether to serve the default error message (false) or the specific error message passed to the ServeError method (true). This lets you report detailed error messages to the browser while developing, which can be turned-off later in production. The ErrorHandler's AlwaysServeError method lets you override the default error message even when the handler is set not to display specific errors.
+As the above examples show, the functions used to create a NotFoundHandler only need a template, while the functions used to create an ErrorHandler take two more arguments. The first is a string that specifies the default error message to show when the handler's ServeError method is called. The second is a boolean that tells the handler whether to serve the default error message (false) or the specific error message passed to the ServeError method (true). This lets you report detailed error messages to the browser while developing, which can be turned-off later in production. The ErrorHandler's AlwaysServeError method lets you override the default error message even when the handler is set not to display specific errors.
 
 These two handlers are intended to be used indirectly, from inside other handlers, where page not found or server errors occur and you need 
 to report them to the browser. A simplified example http.Handler is shown below illustrating their use.
