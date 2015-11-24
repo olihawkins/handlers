@@ -76,7 +76,8 @@ FileHandler provdes an alternative implementation of the default FileServer in G
 
 ```go
 // Create a NotFoundHandler to use in the FileHandler
-nfh := handlers.LoadNotFoundHandler("templates/notfound.html")
+templatePath := filepath.FromSlash("templates/notfound.html")
+nfh := handlers.LoadNotFoundHandler(templatePath)
 
 // Create a FileHandler for the "./test" directory and map it to path "/test/"
 fh := handlers.NewFileHandler("/test/", "./test", nfh)
