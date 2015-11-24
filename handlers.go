@@ -183,13 +183,13 @@ type FileHandler struct {
 }
 
 // FileHandler returns a new FileHandler with the handler values initialised.
-func NewFileHandler(urlPath string, directory string, nfh http.Handler) *FileHandler {
+func NewFileHandler(urlPath string, directory string, notFoundHandler http.Handler) *FileHandler {
 
 	return &FileHandler{
 
 		urlPath: urlPath,
 		directory: directory,
-		notFoundHandler: nfh,
+		notFoundHandler: notFoundHandler,
 	}
 }
 
