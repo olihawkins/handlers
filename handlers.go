@@ -68,7 +68,7 @@ func NewErrorHandler(t *template.Template, message string, displayErrors bool) *
 // LoadErrorHandler is a convenience function that returns a new ErrorHandler 
 // using the template file specified by tpath. The function first loads the 
 // template and then creates the ErrorHandler using NewErrorHandler.
-func LoadErrorHandler(tpath string, message string, display bool) *ErrorHandler {
+func LoadErrorHandler(tpath string, message string, displayErrors bool) *ErrorHandler {
 
 	templateFile, err := template.ParseFiles(tpath)
 
@@ -76,7 +76,7 @@ func LoadErrorHandler(tpath string, message string, display bool) *ErrorHandler 
 		log.Fatal(err)
 	}
 
-	return NewErrorHandler(templateFile, message, display)
+	return NewErrorHandler(templateFile, message, displayErrors)
 }
 
 // ServeError serves the appropriate error message in the error template
