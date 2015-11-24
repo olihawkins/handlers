@@ -72,7 +72,7 @@ func (h *ExampleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 ```
 
 ### FileHandler
-FileHandler provdes an alternative implementation of the default FileServer in Go's net/http package. Unlike the default FileServer it does not show directory listings and will return 404 pages using the given NotFoundHandler.
+FileHandler provdes an alternative implementation of the default FileServer in Go's [net/http][gnh] package. Unlike the default FileServer it does not show directory listings and will return 404 pages using the given NotFoundHandler.
 
 ```go
 // Create a NotFoundHandler to use in the FileHandler
