@@ -61,7 +61,7 @@ func (h *ExampleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	data, err := GetSomeData()
 
 	// If the function returns an error, serve the error page
-	if (err != nil) {
+	if err != nil {
 		h.errorHandler.ServeError(w, "Could not get data.")
 		return
 	}
