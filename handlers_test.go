@@ -164,12 +164,12 @@ func TestFileHandler(t *testing.T) {
 	templatePath = filepath.FromSlash("templates/notfound.html")
 	nfh = LoadNotFoundHandler(templatePath)
 
-	// Get a FileHandler on the test directory for the path "/test/"
-	h = NewFileHandler("/test/", "./test", nfh)
+	// Get a FileHandler on the testdata directory for the path "/testdata/"
+	h = NewFileHandler("/testdata/", "./testdata", nfh)
 
-	// Test ServeHTTP on "/test" without the trailing slash
+	// Test ServeHTTP on "/testdata" without the trailing slash
 	response = httptest.NewRecorder()
-	request, _ = http.NewRequest("GET", "/test", nil)
+	request, _ = http.NewRequest("GET", "/testdata", nil)
 	h.ServeHTTP(response, request)
 
 	// Check status code for found
@@ -178,17 +178,17 @@ func TestFileHandler(t *testing.T) {
 			response.Code)
 	}
 
-	// Check the response header contains the redirect to "/test/"
+	// Check the response header contains the redirect to "/testdata/"
 	location = response.HeaderMap["Location"][0]
 
-	if location != "/test/" {
-		t.Errorf("Expected a redirect to \"/test/\" from FileHandler. Got: %s", 
+	if location != "/testdata/" {
+		t.Errorf("Expected a redirect to \"/testdata/\" from FileHandler. Got: %s", 
 			response.HeaderMap)
 	}
 
-	// Test ServeHTTP on "/test/"
+	// Test ServeHTTP on "/testdata/"
 	response = httptest.NewRecorder()
-	request, _ = http.NewRequest("GET", "/test/", nil)
+	request, _ = http.NewRequest("GET", "/testdata/", nil)
 	h.ServeHTTP(response, request)
 
 	// Check status code for ok
@@ -197,7 +197,7 @@ func TestFileHandler(t *testing.T) {
 			response.Code)
 	}
 
-	// Check the response body contains the contents of /test/index.html
+	// Check the response body contains the contents of /testdata/index.html
 	bodyString = response.Body.String()
 
 	if bodyString != testFileBody {
@@ -205,9 +205,9 @@ func TestFileHandler(t *testing.T) {
 			"\" from FileHandler. Got: %s", bodyString)
 	}
 
-	// Test ServeHTTP on "/test/index.html"
+	// Test ServeHTTP on "/testdata/index.html"
 	response = httptest.NewRecorder()
-	request, _ = http.NewRequest("GET", "/test/index.html", nil)
+	request, _ = http.NewRequest("GET", "/testdata/index.html", nil)
 	h.ServeHTTP(response, request)
 
 	// Check status code for moved permanently
@@ -216,7 +216,7 @@ func TestFileHandler(t *testing.T) {
 			response.Code)
 	}
 
-	// Check the response header contains the redirect to the test directory
+	// Check the response header contains the redirect to the testdata directory
 	location = response.HeaderMap["Location"][0]
 
 	if location != "./" {
@@ -224,9 +224,9 @@ func TestFileHandler(t *testing.T) {
 			response.HeaderMap)
 	}
 
-	// Test ServeHTTP on "/test/sub1" without the trailing slash
+	// Test ServeHTTP on "/testdata/sub1" without the trailing slash
 	response = httptest.NewRecorder()
-	request, _ = http.NewRequest("GET", "/test/sub1", nil)
+	request, _ = http.NewRequest("GET", "/testdata/sub1", nil)
 	h.ServeHTTP(response, request)
 
 	// Check status code for found
@@ -235,17 +235,17 @@ func TestFileHandler(t *testing.T) {
 			response.Code)
 	}
 
-	// Check the response header contains the redirect to "/test/sub1/"
+	// Check the response header contains the redirect to "/testdata/sub1/"
 	location = response.HeaderMap["Location"][0]
 
-	if location != "/test/sub1/" {
-		t.Errorf("Expected a redirect to \"/test/sub1/\" from FileHandler. Got: %s", 
+	if location != "/testdata/sub1/" {
+		t.Errorf("Expected a redirect to \"/testdata/sub1/\" from FileHandler. Got: %s", 
 			response.HeaderMap)
 	}
 
-	// Test ServeHTTP on "/test/sub1/"
+	// Test ServeHTTP on "/testdata/sub1/"
 	response = httptest.NewRecorder()
-	request, _ = http.NewRequest("GET", "/test/sub1/", nil)
+	request, _ = http.NewRequest("GET", "/testdata/sub1/", nil)
 	h.ServeHTTP(response, request)
 
 	// Check status code for ok
@@ -254,7 +254,7 @@ func TestFileHandler(t *testing.T) {
 			response.Code)
 	}
 
-	// Check the response body contains the contents of /test/sub1/index.html
+	// Check the response body contains the contents of /testdata/sub1/index.html
 	bodyString = response.Body.String()
 
 	if bodyString != sub1FileBody {
@@ -262,9 +262,9 @@ func TestFileHandler(t *testing.T) {
 			"\" from FileHandler. Got: %s", bodyString)
 	}
 
-	// Test ServeHTTP on "/test/sub1/index.html"
+	// Test ServeHTTP on "/testdata/sub1/index.html"
 	response = httptest.NewRecorder()
-	request, _ = http.NewRequest("GET", "/test/sub1/index.html", nil)
+	request, _ = http.NewRequest("GET", "/testdata/sub1/index.html", nil)
 	h.ServeHTTP(response, request)
 
 	// Check status code for moved permamnently
@@ -281,9 +281,9 @@ func TestFileHandler(t *testing.T) {
 			response.HeaderMap)
 	}	
 
-	// Test ServeHTTP on "/test/sub2" without the trailing slash
+	// Test ServeHTTP on "/testdata/sub2" without the trailing slash
 	response = httptest.NewRecorder()
-	request, _ = http.NewRequest("GET", "/test/sub2", nil)
+	request, _ = http.NewRequest("GET", "/testdata/sub2", nil)
 	h.ServeHTTP(response, request)
 
 	// Check status code for found
@@ -292,17 +292,17 @@ func TestFileHandler(t *testing.T) {
 			response.Code)
 	}
 
-	// Check the response header contains the redirect to "/test/sub1/"
+	// Check the response header contains the redirect to "/testdata/sub1/"
 	location = response.HeaderMap["Location"][0]
 
-	if location != "/test/sub2/" {
-		t.Errorf("Expected a redirect to \"/test/sub2/\" from FileHandler. Got: %s", 
+	if location != "/testdata/sub2/" {
+		t.Errorf("Expected a redirect to \"/testdata/sub2/\" from FileHandler. Got: %s", 
 			response.HeaderMap)
 	}
 
-	// Test ServeHTTP on "/test/sub2/"
+	// Test ServeHTTP on "/testdata/sub2/"
 	response = httptest.NewRecorder()
-	request, _ = http.NewRequest("GET", "/test/sub2/", nil)
+	request, _ = http.NewRequest("GET", "/testdata/sub2/", nil)
 	h.ServeHTTP(response, request)
 
 	// Check status code for not found
@@ -314,14 +314,14 @@ func TestFileHandler(t *testing.T) {
 	// Check the response body contains the path
 	bodyString = response.Body.String()
 
-	if bodyString != "Not Found: /test/sub2/" {
-		t.Errorf("Expected \"Not Found: /test/sub2/" +
+	if bodyString != "Not Found: /testdata/sub2/" {
+		t.Errorf("Expected \"Not Found: /testdata/sub2/" +
 			"\" from FileHandler. Got: %s", bodyString)
 	}	
 
-	// Test ServeHTTP on "/test/sub2/not-index.html"
+	// Test ServeHTTP on "/testdata/sub2/not-index.html"
 	response = httptest.NewRecorder()
-	request, _ = http.NewRequest("GET", "/test/sub2/not-index.html", nil)
+	request, _ = http.NewRequest("GET", "/testdata/sub2/not-index.html", nil)
 	h.ServeHTTP(response, request)
 
 	// Check status code for ok
@@ -330,7 +330,7 @@ func TestFileHandler(t *testing.T) {
 			response.Code)
 	}
 
-	// Check the response body contains the contents of /test/sub/not-index.html
+	// Check the response body contains the contents of /testdata/sub/not-index.html
 	bodyString = response.Body.String()
 
 	if bodyString != sub2FileBody {
@@ -338,9 +338,9 @@ func TestFileHandler(t *testing.T) {
 			"\" from FileHandler. Got: %s", bodyString)
 	}
 
-	// Test ServeHTTP on an arbitrary non existent file under "/test/"
+	// Test ServeHTTP on an arbitrary non existent file under "/testdata/"
 	response = httptest.NewRecorder()
-	request, _ = http.NewRequest("GET", "/test/nofile", nil)
+	request, _ = http.NewRequest("GET", "/testdata/nofile", nil)
 	h.ServeHTTP(response, request)
 
 	// Check status code for not found
@@ -352,8 +352,8 @@ func TestFileHandler(t *testing.T) {
 	// Check the response body contains the path
 	bodyString = response.Body.String()
 
-	if bodyString != "Not Found: /test/nofile" {
-		t.Errorf("Expected \"Not Found: /test/nofile" +
+	if bodyString != "Not Found: /testdata/nofile" {
+		t.Errorf("Expected \"Not Found: /testdata/nofile" +
 			"\" from FileHandler. Got: %s", bodyString)
 	}	
 }
