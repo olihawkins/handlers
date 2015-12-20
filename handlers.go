@@ -199,7 +199,7 @@ func (h *FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	const indexPage string = "index.html"
 	
-	var(
+	var (
 		requestPath string = r.URL.Path[len(h.urlPath)-1:] 
 		filePath string
 	)

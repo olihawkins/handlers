@@ -10,12 +10,12 @@ import (
 // Test ErrorHandler functions and methods
 func TestErrorHandler(t *testing.T) {
 
-	const(
+	const (
 		defaultMessage string = "Default error message"
 		customMessage string = "Test ServeError"
 	)
 
-	var(
+	var (
 		h *ErrorHandler
 		templatePath string
 		bodyString string
@@ -107,7 +107,7 @@ func TestErrorHandler(t *testing.T) {
 // Test NotFoundHandler functions and methods
 func TestNotFoundHandler(t *testing.T) {
 
-	var(
+	var (
 		h *NotFoundHandler
 		templatePath string
 		bodyString string
@@ -144,13 +144,13 @@ func TestNotFoundHandler(t *testing.T) {
 // Test FileHandler functions and methods
 func TestFileHandler(t *testing.T) {
 
-	const(
+	const (
 		testFileBody string = "Test"
 		sub1FileBody string = "Sub1"
 		sub2FileBody string = "Sub2"
 	)
 
-	var(
+	var (
 		h *FileHandler
 		nfh *NotFoundHandler
 		templatePath string
