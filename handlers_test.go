@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"testing"
-	"path/filepath"
 	"net/http"
 	"net/http/httptest"
+	"path/filepath"
+	"testing"
 )
 
 // Test ErrorHandler functions and methods
@@ -12,15 +12,15 @@ func TestErrorHandler(t *testing.T) {
 
 	const (
 		defaultMessage string = "Default error message"
-		customMessage string = "Test ServeError"
+		customMessage  string = "Test ServeError"
 	)
 
 	var (
-		h *ErrorHandler
+		h            *ErrorHandler
 		templatePath string
-		bodyString string
-		response *httptest.ResponseRecorder
-	)	
+		bodyString   string
+		response     *httptest.ResponseRecorder
+	)
 
 	// Set the template path
 	templatePath = filepath.FromSlash("templates/error.html")
@@ -34,15 +34,15 @@ func TestErrorHandler(t *testing.T) {
 
 	// Check status code
 	if response.Code != http.StatusInternalServerError {
-		t.Errorf("Expected StatusInternalServerError from ErrorHandler. Got: %s", 
+		t.Errorf("Expected StatusInternalServerError from ErrorHandler. Got: %s",
 			response.Code)
 	}
 
 	// Check the response body contains the custom message
 	bodyString = response.Body.String()
 
-	if bodyString != "Error: " + customMessage {
-		t.Errorf("Expected \"Error: " + customMessage + 
+	if bodyString != "Error: "+customMessage {
+		t.Errorf("Expected \"Error: "+customMessage+
 			"\" from ErrorHandler. Got: %s", bodyString)
 	}
 
@@ -52,15 +52,15 @@ func TestErrorHandler(t *testing.T) {
 
 	// Check status code
 	if response.Code != http.StatusInternalServerError {
-		t.Errorf("Expected StatusInternalServerError from ErrorHandler. Got: %s", 
+		t.Errorf("Expected StatusInternalServerError from ErrorHandler. Got: %s",
 			response.Code)
 	}
 
 	// Check the response body contains the custom message
 	bodyString = response.Body.String()
 
-	if bodyString != "Error: " + customMessage {
-		t.Errorf("Expected \"Error: " + customMessage + 
+	if bodyString != "Error: "+customMessage {
+		t.Errorf("Expected \"Error: "+customMessage+
 			"\" from ErrorHandler. Got: %s", bodyString)
 	}
 
@@ -73,15 +73,15 @@ func TestErrorHandler(t *testing.T) {
 
 	// Check status code
 	if response.Code != http.StatusInternalServerError {
-		t.Errorf("Expected StatusInternalServerError from ErrorHandler. Got: %s", 
+		t.Errorf("Expected StatusInternalServerError from ErrorHandler. Got: %s",
 			response.Code)
 	}
 
 	// Check the response body contains the default message
 	bodyString = response.Body.String()
 
-	if bodyString != "Error: " + defaultMessage {
-		t.Errorf("Expected \"Error: " + defaultMessage + 
+	if bodyString != "Error: "+defaultMessage {
+		t.Errorf("Expected \"Error: "+defaultMessage+
 			"\" from ErrorHandler. Got: %s", bodyString)
 	}
 
@@ -91,15 +91,15 @@ func TestErrorHandler(t *testing.T) {
 
 	// Check status code
 	if response.Code != http.StatusInternalServerError {
-		t.Errorf("Expected StatusInternalServerError from ErrorHandler. Got: %s", 
+		t.Errorf("Expected StatusInternalServerError from ErrorHandler. Got: %s",
 			response.Code)
 	}
 
 	// Check the response body contains the custom message
 	bodyString = response.Body.String()
 
-	if bodyString != "Error: " + customMessage {
-		t.Errorf("Expected \"Error: " + customMessage + 
+	if bodyString != "Error: "+customMessage {
+		t.Errorf("Expected \"Error: "+customMessage+
 			"\" from ErrorHandler. Got: %s", bodyString)
 	}
 }
@@ -108,11 +108,11 @@ func TestErrorHandler(t *testing.T) {
 func TestNotFoundHandler(t *testing.T) {
 
 	var (
-		h *NotFoundHandler
+		h            *NotFoundHandler
 		templatePath string
-		bodyString string
-		response *httptest.ResponseRecorder
-		request *http.Request
+		bodyString   string
+		response     *httptest.ResponseRecorder
+		request      *http.Request
 	)
 
 	// Set the paths
@@ -128,7 +128,7 @@ func TestNotFoundHandler(t *testing.T) {
 
 	// Check status code
 	if response.Code != http.StatusNotFound {
-		t.Errorf("Expected StatusNotFound from NotFoundHandler. Got: %s", 
+		t.Errorf("Expected StatusNotFound from NotFoundHandler. Got: %s",
 			response.Code)
 	}
 
@@ -136,7 +136,7 @@ func TestNotFoundHandler(t *testing.T) {
 	bodyString = response.Body.String()
 
 	if bodyString != "Not Found: /path" {
-		t.Errorf("Expected \"Not Found: /path" + 
+		t.Errorf("Expected \"Not Found: /path"+
 			"\" from NotFoundHandler. Got: %s", bodyString)
 	}
 }
@@ -151,13 +151,13 @@ func TestFileHandler(t *testing.T) {
 	)
 
 	var (
-		h *FileHandler
-		nfh *NotFoundHandler
+		h            *FileHandler
+		nfh          *NotFoundHandler
 		templatePath string
-		bodyString string
-		location string
-		response *httptest.ResponseRecorder
-		request *http.Request
+		bodyString   string
+		location     string
+		response     *httptest.ResponseRecorder
+		request      *http.Request
 	)
 
 	// Get a NotFoundHandler with the not found template
@@ -174,7 +174,7 @@ func TestFileHandler(t *testing.T) {
 
 	// Check status code for found
 	if response.Code != http.StatusFound {
-		t.Errorf("Expected StatusFound from FileHandler. Got: %s", 
+		t.Errorf("Expected StatusFound from FileHandler. Got: %s",
 			response.Code)
 	}
 
@@ -182,7 +182,7 @@ func TestFileHandler(t *testing.T) {
 	location = response.HeaderMap["Location"][0]
 
 	if location != "/testdata/" {
-		t.Errorf("Expected a redirect to \"/testdata/\" from FileHandler. Got: %s", 
+		t.Errorf("Expected a redirect to \"/testdata/\" from FileHandler. Got: %s",
 			response.HeaderMap)
 	}
 
@@ -193,7 +193,7 @@ func TestFileHandler(t *testing.T) {
 
 	// Check status code for ok
 	if response.Code != http.StatusOK {
-		t.Errorf("Expected StatusOK from FileHandler. Got: %s", 
+		t.Errorf("Expected StatusOK from FileHandler. Got: %s",
 			response.Code)
 	}
 
@@ -201,7 +201,7 @@ func TestFileHandler(t *testing.T) {
 	bodyString = response.Body.String()
 
 	if bodyString != testFileBody {
-		t.Errorf("Expected \"" + testFileBody + 
+		t.Errorf("Expected \""+testFileBody+
 			"\" from FileHandler. Got: %s", bodyString)
 	}
 
@@ -212,7 +212,7 @@ func TestFileHandler(t *testing.T) {
 
 	// Check status code for moved permanently
 	if response.Code != http.StatusMovedPermanently {
-		t.Errorf("Expected StatusMovedPermanently from FileHandler. Got: %s", 
+		t.Errorf("Expected StatusMovedPermanently from FileHandler. Got: %s",
 			response.Code)
 	}
 
@@ -220,7 +220,7 @@ func TestFileHandler(t *testing.T) {
 	location = response.HeaderMap["Location"][0]
 
 	if location != "./" {
-		t.Errorf("Expected a redirect to \"./\" from FileHandler. Got: %s", 
+		t.Errorf("Expected a redirect to \"./\" from FileHandler. Got: %s",
 			response.HeaderMap)
 	}
 
@@ -231,7 +231,7 @@ func TestFileHandler(t *testing.T) {
 
 	// Check status code for found
 	if response.Code != http.StatusFound {
-		t.Errorf("Expected StatusFound from FileHandler. Got: %s", 
+		t.Errorf("Expected StatusFound from FileHandler. Got: %s",
 			response.Code)
 	}
 
@@ -239,7 +239,7 @@ func TestFileHandler(t *testing.T) {
 	location = response.HeaderMap["Location"][0]
 
 	if location != "/testdata/sub1/" {
-		t.Errorf("Expected a redirect to \"/testdata/sub1/\" from FileHandler. Got: %s", 
+		t.Errorf("Expected a redirect to \"/testdata/sub1/\" from FileHandler. Got: %s",
 			response.HeaderMap)
 	}
 
@@ -250,7 +250,7 @@ func TestFileHandler(t *testing.T) {
 
 	// Check status code for ok
 	if response.Code != http.StatusOK {
-		t.Errorf("Expected StatusOK from FileHandler. Got: %s", 
+		t.Errorf("Expected StatusOK from FileHandler. Got: %s",
 			response.Code)
 	}
 
@@ -258,7 +258,7 @@ func TestFileHandler(t *testing.T) {
 	bodyString = response.Body.String()
 
 	if bodyString != sub1FileBody {
-		t.Errorf("Expected \"" + sub1FileBody + 
+		t.Errorf("Expected \""+sub1FileBody+
 			"\" from FileHandler. Got: %s", bodyString)
 	}
 
@@ -269,7 +269,7 @@ func TestFileHandler(t *testing.T) {
 
 	// Check status code for moved permamnently
 	if response.Code != http.StatusMovedPermanently {
-		t.Errorf("Expected StatusMovedPermanently from FileHandler. Got: %s", 
+		t.Errorf("Expected StatusMovedPermanently from FileHandler. Got: %s",
 			response.Code)
 	}
 
@@ -277,9 +277,9 @@ func TestFileHandler(t *testing.T) {
 	location = response.HeaderMap["Location"][0]
 
 	if location != "./" {
-		t.Errorf("Expected a redirect to \"./\" from FileHandler. Got: %s", 
+		t.Errorf("Expected a redirect to \"./\" from FileHandler. Got: %s",
 			response.HeaderMap)
-	}	
+	}
 
 	// Test ServeHTTP on "/testdata/sub2" without the trailing slash
 	response = httptest.NewRecorder()
@@ -288,7 +288,7 @@ func TestFileHandler(t *testing.T) {
 
 	// Check status code for found
 	if response.Code != http.StatusFound {
-		t.Errorf("Expected StatusFound from FileHandler. Got: %s", 
+		t.Errorf("Expected StatusFound from FileHandler. Got: %s",
 			response.Code)
 	}
 
@@ -296,7 +296,7 @@ func TestFileHandler(t *testing.T) {
 	location = response.HeaderMap["Location"][0]
 
 	if location != "/testdata/sub2/" {
-		t.Errorf("Expected a redirect to \"/testdata/sub2/\" from FileHandler. Got: %s", 
+		t.Errorf("Expected a redirect to \"/testdata/sub2/\" from FileHandler. Got: %s",
 			response.HeaderMap)
 	}
 
@@ -307,7 +307,7 @@ func TestFileHandler(t *testing.T) {
 
 	// Check status code for not found
 	if response.Code != http.StatusNotFound {
-		t.Errorf("Expected StatusNotFound from FileHandler. Got: %s", 
+		t.Errorf("Expected StatusNotFound from FileHandler. Got: %s",
 			response.Code)
 	}
 
@@ -315,9 +315,9 @@ func TestFileHandler(t *testing.T) {
 	bodyString = response.Body.String()
 
 	if bodyString != "Not Found: /testdata/sub2/" {
-		t.Errorf("Expected \"Not Found: /testdata/sub2/" +
+		t.Errorf("Expected \"Not Found: /testdata/sub2/"+
 			"\" from FileHandler. Got: %s", bodyString)
-	}	
+	}
 
 	// Test ServeHTTP on "/testdata/sub2/not-index.html"
 	response = httptest.NewRecorder()
@@ -326,7 +326,7 @@ func TestFileHandler(t *testing.T) {
 
 	// Check status code for ok
 	if response.Code != http.StatusOK {
-		t.Errorf("Expected StatusOK from FileHandler. Got: %s", 
+		t.Errorf("Expected StatusOK from FileHandler. Got: %s",
 			response.Code)
 	}
 
@@ -334,7 +334,7 @@ func TestFileHandler(t *testing.T) {
 	bodyString = response.Body.String()
 
 	if bodyString != sub2FileBody {
-		t.Errorf("Expected \"" + sub2FileBody + 
+		t.Errorf("Expected \""+sub2FileBody+
 			"\" from FileHandler. Got: %s", bodyString)
 	}
 
@@ -345,7 +345,7 @@ func TestFileHandler(t *testing.T) {
 
 	// Check status code for not found
 	if response.Code != http.StatusNotFound {
-		t.Errorf("Expected StatusNotFound from FileHandler. Got: %s", 
+		t.Errorf("Expected StatusNotFound from FileHandler. Got: %s",
 			response.Code)
 	}
 
@@ -353,7 +353,7 @@ func TestFileHandler(t *testing.T) {
 	bodyString = response.Body.String()
 
 	if bodyString != "Not Found: /testdata/nofile" {
-		t.Errorf("Expected \"Not Found: /testdata/nofile" +
+		t.Errorf("Expected \"Not Found: /testdata/nofile"+
 			"\" from FileHandler. Got: %s", bodyString)
-	}	
+	}
 }

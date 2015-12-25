@@ -1,72 +1,69 @@
 /*
-Package handlers is a small library of utility http handlers that are useful 
-for building web applications. It includes a NotFoundHandler, an ErrorHandler, 
-and a FileHandler. 
+Package handlers is a small library of utility http handlers that are useful
+for building web applications. It includes a NotFoundHandler, an ErrorHandler,
+and a FileHandler.
 
-The NotFoundHandler and ErrorHandler provide a simple way to respond to the 
-client with custom 404 and 500 status pages: create your own application 
-specific error page templates and call each of the handler's Serve methods 
+The NotFoundHandler and ErrorHandler provide a simple way to respond to the
+client with custom 404 and 500 status pages: create your own application
+specific error page templates and call each of the handler's Serve methods
 with the appropriate arguments.
 
-These two handlers are intended to be used indirectly, from inside other 
-handlers where server errors or page not found errors occur and you need 
-to report them to the browser. However, both of these types implement the 
-http.Handler interface with a ServeHTTP method, which shows their default 
+These two handlers are intended to be used indirectly, from inside other
+handlers where server errors or page not found errors occur and you need
+to report them to the browser. However, both of these types implement the
+http.Handler interface with a ServeHTTP method, which shows their default
 behaviour when bound to a specific route.
 
-The FileHandler provides similar functionality to the FileServer in the 
-net/http package, but with two differences: it will not show directory 
-listings for directories under its path, and it will respond to any request 
+The FileHandler provides similar functionality to the FileServer in the
+net/http package, but with two differences: it will not show directory
+listings for directories under its path, and it will respond to any request
 for a non-existent file with the given NotFoundHandler.
 */
 package handlers
 
 import (
-	"log"
-	"os"
-	"strings"
-	"path/filepath"
-	"net/http"
 	"html/template"
+	"log"
+	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
 )
 
-// ErrorMessage holds the message passed to the error template. The template 
+// ErrorMessage holds the message passed to the error template. The template
 // can access the message field with the {{.ErrorMessage}} tag.
 type ErrorMessage struct {
-
 	ErrorMessage string
 }
 
 // ErrorHandler serves error messages with the given template. The template
 // can access the message served by the handler with the {{.ErrorMessage}} tag.
 type ErrorHandler struct {
-
-	template *template.Template
+	template       *template.Template
 	defaultMessage string
-	displayErrors bool
+	displayErrors  bool
 }
 
 // NewErrorHandler returns a new ErrorHandler with the handler values initialised.
-// The handler uses the given template to print an error message. The template 
-// must display {{.ErrorMessage}}. The default error message is set to message. 
-// The display argument controls whether error messages passed to the handler's 
-// ServeError function are shown to the user on the error page, or whether the 
-// default error message is shown instead. This allows detailed error messages 
-// to be printed to the screen during development, but turned off in production. 
+// The handler uses the given template to print an error message. The template
+// must display {{.ErrorMessage}}. The default error message is set to message.
+// The display argument controls whether error messages passed to the handler's
+// ServeError function are shown to the user on the error page, or whether the
+// default error message is shown instead. This allows detailed error messages
+// to be printed to the screen during development, but turned off in production.
 // The handler's AlwaysServeError method forces the display of a particular
 // error message even if displayErrors is set to false.
 func NewErrorHandler(template *template.Template, defaultMessage string, displayErrors bool) *ErrorHandler {
 
 	return &ErrorHandler{
-
-		template: template,
+		template:       template,
 		defaultMessage: defaultMessage,
-		displayErrors: displayErrors,
+		displayErrors:  displayErrors,
 	}
 }
 
-// LoadErrorHandler is a convenience function that returns a new ErrorHandler 
-// using the template file specified by templatePath. The function first loads 
+// LoadErrorHandler is a convenience function that returns a new ErrorHandler
+// using the template file specified by templatePath. The function first loads
 // the template and then creates the ErrorHandler using NewErrorHandler.
 func LoadErrorHandler(templatePath string, defaultMessage string, displayErrors bool) *ErrorHandler {
 
@@ -85,11 +82,11 @@ func LoadErrorHandler(templatePath string, defaultMessage string, displayErrors 
 func (h *ErrorHandler) ServeError(w http.ResponseWriter, message string) {
 
 	var templateData *ErrorMessage
-	
+
 	if h.displayErrors {
-	
+
 		templateData = &ErrorMessage{message}
-	
+
 	} else {
 
 		templateData = &ErrorMessage{h.defaultMessage}
@@ -101,10 +98,10 @@ func (h *ErrorHandler) ServeError(w http.ResponseWriter, message string) {
 }
 
 // AlwaysServeError serves the given error message in the error template.
-// This method overrides the default error message, irrespective of whether 
-// displayErrors is false, and ensures that the given message is always shown. 
+// This method overrides the default error message, irrespective of whether
+// displayErrors is false, and ensures that the given message is always shown.
 func (h *ErrorHandler) AlwaysServeError(w http.ResponseWriter, message string) {
-	
+
 	templateData := &ErrorMessage{message}
 	w.WriteHeader(http.StatusInternalServerError)
 	h.template.Execute(w, templateData)
@@ -113,40 +110,37 @@ func (h *ErrorHandler) AlwaysServeError(w http.ResponseWriter, message string) {
 
 // ServeHTTP serves the default error message in the error template.
 func (h *ErrorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	
+
 	templateData := &ErrorMessage{h.defaultMessage}
 	w.WriteHeader(http.StatusInternalServerError)
 	h.template.Execute(w, templateData)
 	return
 }
 
-// NotFoundData holds the path passed to the handler's template. The template 
+// NotFoundData holds the path passed to the handler's template. The template
 // can access the message field with the {{.Path}} tag.
 type NotFoundData struct {
-
 	Path string
 }
 
 // NotFoundHandler serves a 404 with the given template. The template
 // can access the path to the file not found with {{.Path}} tag.
 type NotFoundHandler struct {
-
 	template *template.Template
 }
 
-// NewNotFoundHandler returns a new NotFoundHandler with the handler values 
+// NewNotFoundHandler returns a new NotFoundHandler with the handler values
 // initialised. The handler uses the given template to print the path to the
 // file not found with a 404. The template must display {{.Path}}.
 func NewNotFoundHandler(template *template.Template) *NotFoundHandler {
 
 	return &NotFoundHandler{
-
 		template: template,
 	}
 }
 
-// LoadNotFoundHandler is a convenience function that returns a new NotFoundHandler 
-// using the template file specified by templatePath. The function first loads the 
+// LoadNotFoundHandler is a convenience function that returns a new NotFoundHandler
+// using the template file specified by templatePath. The function first loads the
 // template and then creates the NotFoundHandler using NewNotFoundHandler.
 func LoadNotFoundHandler(templatePath string) *NotFoundHandler {
 
@@ -161,24 +155,23 @@ func LoadNotFoundHandler(templatePath string) *NotFoundHandler {
 
 // ServeHTTP serves the path in the handler's template.
 func (h *NotFoundHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	
+
 	templateData := &NotFoundData{r.URL.Path}
 	w.WriteHeader(http.StatusNotFound)
 	h.template.Execute(w, templateData)
 	return
 }
 
-// FileHandler serves files requested under the given url path from the given 
-// directory. The url path should be the same as the path to which the handler 
-// is bound with http.Handle. If the file is not found the handler serves a 404 
-// using the given notFoundHandler. The notFoundHandler can be any Handler, but 
-// its ServeHTTP method should return a 404. Unlike Go's built-in FileServer, 
-// FileHandler will not return directory listings for directories without an 
-// index.html and will instead respond with a 404. 
+// FileHandler serves files requested under the given url path from the given
+// directory. The url path should be the same as the path to which the handler
+// is bound with http.Handle. If the file is not found the handler serves a 404
+// using the given notFoundHandler. The notFoundHandler can be any Handler, but
+// its ServeHTTP method should return a 404. Unlike Go's built-in FileServer,
+// FileHandler will not return directory listings for directories without an
+// index.html and will instead respond with a 404.
 type FileHandler struct {
-
-	urlPath string
-	directory string
+	urlPath         string
+	directory       string
 	notFoundHandler http.Handler
 }
 
@@ -186,34 +179,33 @@ type FileHandler struct {
 func NewFileHandler(urlPath string, directory string, notFoundHandler http.Handler) *FileHandler {
 
 	return &FileHandler{
-
-		urlPath: urlPath,
-		directory: directory,
+		urlPath:         urlPath,
+		directory:       directory,
 		notFoundHandler: notFoundHandler,
 	}
 }
 
-// ServeHTTP is a wrapper around http.ServeFile, with paths and response 
+// ServeHTTP is a wrapper around http.ServeFile, with paths and response
 // values modified to provide the appropriate behaviour for the FileHandler.
 func (h *FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	const indexPage string = "index.html"
-	
+
 	var (
-		requestPath string = r.URL.Path[len(h.urlPath)-1:] 
-		filePath string
+		requestPath string = r.URL.Path[len(h.urlPath)-1:]
+		filePath    string
 	)
-	
+
 	// If the request path ends in "/" ...
 	if strings.HasSuffix(r.URL.Path, "/") {
 
 		// Set the target filepath to index.html
-		filePath = h.directory + filepath.FromSlash(requestPath + indexPage)	
-	
+		filePath = h.directory + filepath.FromSlash(requestPath+indexPage)
+
 	} else {
 
 		// Otherwise set the target filepath to the named file
-		filePath = h.directory + filepath.FromSlash(requestPath)	
+		filePath = h.directory + filepath.FromSlash(requestPath)
 	}
 
 	// Try to get file info
@@ -231,15 +223,14 @@ func (h *FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// If the target file is a directory redirect to the path with a slash
 	case mode.IsDir():
-		
-		http.Redirect(w, r, r.URL.Path + "/", http.StatusFound)
-	
+
+		http.Redirect(w, r, r.URL.Path+"/", http.StatusFound)
+
 	// Otherwise serve the file
 	case mode.IsRegular():
-		
+
 		http.ServeFile(w, r, filePath)
 	}
 
 	return
 }
-	
