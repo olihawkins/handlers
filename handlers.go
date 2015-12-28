@@ -22,6 +22,7 @@ for a non-existent file with the given NotFoundHandler.
 package handlers
 
 import (
+	"bytes"
 	"html/template"
 	"log"
 	"net/http"
@@ -81,7 +82,10 @@ func LoadErrorHandler(templatePath string, defaultMessage string, displayErrors 
 // the given message is shown, otherwise the default error message is shown.
 func (h *ErrorHandler) ServeError(w http.ResponseWriter, message string) {
 
-	var templateData *ErrorMessage
+	var (
+		templateData *ErrorMessage
+		buffer       bytes.Buffer
+	)
 
 	if h.displayErrors {
 
@@ -92,8 +96,18 @@ func (h *ErrorHandler) ServeError(w http.ResponseWriter, message string) {
 		templateData = &ErrorMessage{h.defaultMessage}
 	}
 
+	// Execute template into buffer
+	err := h.template.Execute(&buffer, templateData)
+
+	// If template execution fails, fallback to the built-in http error
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Otherwise serve the error in the error template
 	w.WriteHeader(http.StatusInternalServerError)
-	h.template.Execute(w, templateData)
+	buffer.WriteTo(w)
 	return
 }
 
@@ -102,18 +116,42 @@ func (h *ErrorHandler) ServeError(w http.ResponseWriter, message string) {
 // displayErrors is false, and ensures that the given message is always shown.
 func (h *ErrorHandler) AlwaysServeError(w http.ResponseWriter, message string) {
 
+	var buffer bytes.Buffer
 	templateData := &ErrorMessage{message}
+
+	// Execute template into buffer
+	err := h.template.Execute(&buffer, templateData)
+
+	// If template execution fails, fallback to the built-in http error
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Otherwise serve the error in the error template
 	w.WriteHeader(http.StatusInternalServerError)
-	h.template.Execute(w, templateData)
+	buffer.WriteTo(w)
 	return
 }
 
 // ServeHTTP serves the default error message in the error template.
 func (h *ErrorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
+	var buffer bytes.Buffer
 	templateData := &ErrorMessage{h.defaultMessage}
+
+	// Execute template into buffer
+	err := h.template.Execute(&buffer, templateData)
+
+	// If template execution fails, fallback to the built-in http error
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Otherwise serve the error in the error template
 	w.WriteHeader(http.StatusInternalServerError)
-	h.template.Execute(w, templateData)
+	buffer.WriteTo(w)
 	return
 }
 
@@ -156,9 +194,21 @@ func LoadNotFoundHandler(templatePath string) *NotFoundHandler {
 // ServeHTTP serves the path in the handler's template.
 func (h *NotFoundHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
+	var buffer bytes.Buffer
 	templateData := &NotFoundData{r.URL.Path}
+
+	// Execute template into buffer
+	err := h.template.Execute(&buffer, templateData)
+
+	// If template execution fails, report it with the built-in http error
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Otherwise serve the 404 in the not found template
 	w.WriteHeader(http.StatusNotFound)
-	h.template.Execute(w, templateData)
+	buffer.WriteTo(w)
 	return
 }
 
