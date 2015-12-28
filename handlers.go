@@ -175,7 +175,7 @@ type FileHandler struct {
 	notFoundHandler http.Handler
 }
 
-// FileHandler returns a new FileHandler with the handler values initialised.
+// NewFileHandler returns a new FileHandler with the handler values initialised.
 func NewFileHandler(urlPath string, directory string, notFoundHandler http.Handler) *FileHandler {
 
 	return &FileHandler{
