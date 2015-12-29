@@ -143,7 +143,7 @@ func (h *ErrorHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Execute template into buffer
 	err := h.template.Execute(&buffer, templateData)
 
-	// If template execution fails, fallback to the built-in http error
+	// If template execution fails, fall back to the built-in http error
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
